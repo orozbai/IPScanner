@@ -2,9 +2,9 @@ package org.example;
 
 import io.javalin.Javalin;
 
-import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,10 +16,11 @@ public class Main {
 
         app.post("/scan", context -> {
             String ipAddressStr = context.formParam("ipAddress");
-            InetAddress ipAddress = InetAddress.getByName(ipAddressStr);
-            int num = Integer.parseInt(context.formParam("numThreads"));
+            int num = Integer.parseInt(Objects.requireNonNull(context.formParam("numThreads")));
 
-
+            Scanner scanner = new Scanner(ipAddressStr, num);
+            scanner.startScanning();
+            context.result("Scanning in progress, wait please");
         });
     }
 }
