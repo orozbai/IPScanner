@@ -8,6 +8,7 @@ import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
+        TrustAllCerts.install();
         Javalin app = Javalin.create().start(7000);
         app.get("/", context -> {
             String htmlContent = new String(Files.readAllBytes(Paths.get("src/web/index.html")));
@@ -20,6 +21,7 @@ public class Main {
 
             Scanner scanner = new Scanner(ipAddressStr, num);
             scanner.startScanning();
+
             context.result("Scanning in progress, wait please");
         });
     }

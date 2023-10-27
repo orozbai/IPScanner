@@ -29,32 +29,22 @@ public class Scanner {
 
             executorService.execute(() -> {
                 try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter("found_domains.txt"));
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("found_domains.txt", true));
 
                     URL url = new URL("https://" + currentIp);
                     HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                     connection.connect();
 
                     Certificate[] certs = connection.getServerCertificates();
-
+                    System.out.println("Успешно подключено к: " + currentIp);
                     for (Certificate cert : certs) {
-                        if (cert instanceof X509Certificate) {
-                            X509Certificate x509Cert = (X509Certificate) cert;
-                            String[] domains = x509Cert.getSubjectAlternativeNames()
-                                    .stream()
-                                    .filter(entry -> entry.get(1).equals(2))
-                                    .map(entry -> (String) entry.get(0))
-                                    .toArray(String[]::new);
-
-                            for (String domain : domains) {
-                                writer.write(domain);
-                                writer.newLine();
-                            }
-                        }
+                        String name = "ip: " + currentIp + " Имя домена: " + ((X509Certificate) cert).getSubjectAlternativeNames();
+                        writer.write(name);
+                        writer.newLine();
                     }
                     writer.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("Не удалось подключиться к: " + currentIp);
                 }
             });
         }
