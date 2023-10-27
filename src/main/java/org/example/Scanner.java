@@ -18,7 +18,7 @@ public class Scanner {
         this.numThreads = numThreads;
     }
 
-    public void startScanning() {
+    public boolean startScanning() {
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
         String[] ipParts = ipAddress.split("\\.");
         int startIp = Integer.parseInt(ipParts[3].split("/")[0]);
@@ -48,5 +48,6 @@ public class Scanner {
                 }
             });
         }
+        return true;
     }
 }

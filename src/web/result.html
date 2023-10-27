@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+</head>
+<body>
+<h1>Содержимое файла:</h1>
+<p>Сканирование еще идет, но вы можете посмотреть уже просканированные</p>
+<button onclick="check()">Посмотреть</button>
+<div id="fileContent"></div>
+
+<script>
+    async function check() {
+        await fetch('/getResult')
+            .then(response => response.text())
+            .then(data => {
+                if (data === "not found") {
+                    document.getElementById('fileContent').textContent = "Ожидайте результаты";
+                }
+                document.getElementById('fileContent').textContent = data;
+            });
+    }
+</script>
+</body>
+</html>
