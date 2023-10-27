@@ -6,7 +6,8 @@
 </head>
 <body>
 <h1>Содержимое файла:</h1>
-<p>Сканирование еще идет, но вы можете посмотреть уже просканированные</p>
+<p>Сканирование еще идет, но вы можете посмотреть просканированные или скачать</p>
+<button onclick="download()">Скачать</button>
 <button onclick="check()">Посмотреть</button>
 <div id="fileContent"></div>
 
@@ -20,6 +21,20 @@
                 }
                 document.getElementById('fileContent').textContent = data;
             });
+    }
+    async function download() {
+        await fetch('/getResult')
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ips.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            })
     }
 </script>
 </body>
